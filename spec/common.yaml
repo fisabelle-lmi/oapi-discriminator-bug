@@ -1,0 +1,123 @@
+components:
+  schemas:
+    PetList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Pet"
+        total:
+          description: Total number of entities
+          type: integer
+          default: 0
+      required:
+        - items
+        - total
+
+
+    Mammal:
+      type: object
+      description: A pet animal class
+      required:
+        - petClass
+        - species
+      properties:
+        petClass:
+          type: string
+          description: The class of the pet
+          enum: [ 'MAMMAL' ]
+        species:
+          type: string
+          description: The species of the pet
+
+    Amphibian:
+      type: object
+      description: A pet animal class
+      required:
+          - petClass
+          - species
+      properties:
+        petClass:
+            type: string
+            description: The class of the pet
+            enum: [ AMPHIBIAN' ]
+
+    Pet:
+      description: A pet
+      type: object
+      properties:
+        petClass:
+          type: string
+          description: The class of the pet
+      required:
+        - petClass
+      oneOf:
+        - $ref: "#/components/schemas/Mammal"
+        - $ref: "#/components/schemas/Amphibian"
+      discriminator:
+        propertyName: petClass
+        mapping:
+          MAMMAL: "#/components/schemas/Mammal"
+          AMPHIBIAN: "#/components/schemas/Amphibian"
+
+    ErrorCode:
+      type: string
+      description: A machine readable identifier of the error type.
+      enum:
+        - CONSTRAINT_VIOLATION
+        - NOT_FOUND
+        - NOT_IMPLEMENTED
+
+    Error:
+      type: object
+      required:
+        - reference
+        - message
+        - errorCode
+      properties:
+        reference:
+          type: string
+          description: A unique identifier used to lookup the error in logging systems.
+        errorCode:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          description: A human readable message describing the issue.
+      example:
+        reference: jhkasdf89hjn3298fs
+        errorCode: CONSTRAINT_VIOLATION
+        message: Invalid data was provided
+
+  responses:
+    400:
+      description: >
+        The request has one or more issues.  The API returns a number of
+        `errorCode` values in the response that provide additional details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    404:
+      description: >
+        There is no receptionist configuration with the provided ID.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    406:
+      description: >
+        The request is not acceptable. The API returns an`errorCode`
+        values in the response that provide additional details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    500:
+      description: >
+        An unknown error occurred. The API returns a number of `errorCode`
+        values in the response that provide additional details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

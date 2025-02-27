@@ -1,0 +1,53 @@
+openapi: "3.0.0"
+info:
+  version: 1.1.0
+  title: Pet Management API
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /pets:
+    get:
+      summary: Lists the pets
+      operationId: getPets
+      responses:
+        '200':
+          description: list of pets
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/components/schemas/PetList'
+        "400":
+          $ref: 'common.yaml#/components/responses/400'
+        "404":
+          $ref: 'common.yaml#/components/responses/404'
+        '406':
+          $ref: 'common.yaml#/components/responses/406'
+        "500":
+          $ref: 'common.yaml#/components/responses/500'
+    post:
+      summary: Creates a new pet
+      operationId: createPet
+      requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/components/schemas/Pet'
+          required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: 'common.yaml#/components/schemas/Pet'
+        "400":
+          $ref: 'common.yaml#/components/responses/400'
+        "404":
+          $ref: 'common.yaml#/components/responses/404'
+        "406":
+          $ref: 'common.yaml#/components/responses/406'
+        "500":
+          $ref: 'common.yaml#/components/responses/500'

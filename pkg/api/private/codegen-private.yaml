@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/main/configuration-schema.json
+package: private
+output: private_generated.go
+output-options:
+  name-normalizer: ToCamelCaseWithInitialisms
+compatibility:
+  always-prefix-enum-values: true
+generate:
+  models: true
+  gorilla-server: true
+  strict-server: true
+  embedded-spec: true
+import-mapping:
+  common.yaml: "github.com/fisabelle-lmi/oapi-discriminator-bug/pkg/api/common"
